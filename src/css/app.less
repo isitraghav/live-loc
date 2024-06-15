@@ -1,1 +1,15 @@
-/* Your app custom styles here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(100%) contrast(100%);
+}
+
+.leaflet-routing-alt,
+.leaflet-control-attribution {
+  display: none;
+}
