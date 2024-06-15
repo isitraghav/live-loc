@@ -1,0 +1,25 @@
+{
+  "cwd": "C:\\Users\\Raghav\\Desktop\\live-loc",
+  "type": [
+    "web",
+    "capacitor"
+  ],
+  "name": "live-loc",
+  "framework": "svelte",
+  "template": "single-view",
+  "bundler": "vite",
+  "cssPreProcessor": "less",
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkMode": true,
+    "iconFonts": true
+  },
+  "customBuild": false,
+  "pkg": "io.framework7.myapp",
+  "capacitor": {
+    "platforms": [
+      "android"
+    ]
+  }
+}
