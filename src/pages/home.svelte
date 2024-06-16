@@ -60,11 +60,7 @@
   const db = GUN({
     localStorage: true,
     radisk: true,
-    peers: [
-      "http://localhost:8765/gun",
-      "https://peer.wallie.io/gun",
-      "https://gun-manhattan.herokuapp.com/gun",
-    ],
+    peers: ["https://plankton-app-6qfp3.ondigitalocean.app/"],
   });
 
   let livelocid;
