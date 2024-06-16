@@ -1,6 +1,8 @@
 ## Live-loc
 A decentralized location sharing and navigation app
 
+[DOWNLOAD APPLICATION DEMO](https://github.com/isitraghav/live-loc/releases/download/v1.0.0/app-debug.apk)
+
 ![](./resources/ss%20(1).png)
 ![](./resources/ss%20(3).png)
 ![](./resources/ss%20(2).png)
