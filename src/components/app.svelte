@@ -1,4 +1,6 @@
 <script>
+  import eruda from "eruda";
+  eruda.init();
   import { KonstaProvider } from "konsta/svelte";
   import { App, Page, View } from "framework7-svelte";
   import HomePage from "../pages/home.svelte";

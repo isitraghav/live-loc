@@ -38,6 +38,9 @@ importers:
       dom7:
         specifier: ^4.0.6
         version: 4.0.6
+      eruda:
+        specifier: ^3.0.1
+        version: 3.0.1
       framework7:
         specifier: ^8.3.3
         version: 8.3.3
@@ -1037,6 +1040,9 @@ packages:
   errno@0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==}
     hasBin: true
+
+  eruda@3.0.1:
+    resolution: {integrity: sha512-6q1Xdwga4JTr1mKSW4mzuWSSbmXgqpm/8Wa1QGFGfCWRjC0bCQjbS4u06M1te1moucIS3hBLlbSTPWYH2W0qbQ==}
 
   esbuild@0.21.5:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
@@ -2947,6 +2953,8 @@ snapshots:
     dependencies:
       prr: 1.0.1
     optional: true
+
+  eruda@3.0.1: {}
 
   esbuild@0.21.5:
     optionalDependencies:

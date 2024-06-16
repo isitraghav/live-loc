@@ -29,6 +29,7 @@
     "@capacitor/status-bar": "^6.0.0",
     "copy-to-clipboard": "^3.3.3",
     "dom7": "^4.0.6",
+    "eruda": "^3.0.1",
     "framework7": "^8.3.3",
     "framework7-icons": "^5.0.5",
     "framework7-svelte": "^8.3.3",
