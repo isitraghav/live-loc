@@ -60,7 +60,7 @@
   const db = GUN({
     localStorage: true,
     radisk: true,
-    peers: ["https://plankton-app-6qfp3.ondigitalocean.app/"],
+    peers: ["https://gun-manhattan.herokuapp.com/gun"],
   });
 
   let livelocid;
