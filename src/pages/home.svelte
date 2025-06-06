@@ -194,6 +194,7 @@
       );
     } catch (error) {
       console.error("Error sharing location:", error);
+      shareloc();
     } finally {
       loading = false;
     }
