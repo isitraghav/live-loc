@@ -112,11 +112,13 @@
           await Geolocation.watchPosition(
             { enableHighAccuracy: true },
             (res) => {
-              db.get("liveloc")
-                .get(`${livelocid}reply`)
-                .put(
-                  JSON.stringify([res.coords.latitude, res.coords.longitude])
-                );
+              if (res) {
+                db.get("liveloc")
+                  .get(`${livelocid}reply`)
+                  .put(
+                    JSON.stringify([res.coords.latitude, res.coords.longitude])
+                  );
+              }
             }
           );
         }
@@ -212,6 +214,10 @@
         console.log(er);
       });
   }
+
+  db.get("liveloc").on((res) => {
+    console.log(res);
+  });
 </script>
 
 <Page>
@@ -241,7 +247,10 @@
               onInput={(res) => {
                 livelocid = res.srcElement.value;
               }}
-              onChange={() => { trackID(); trackID(); }}
+              onChange={() => {
+                trackID();
+                trackID();
+              }}
               type="text"
               placeholder="Enter liv-loc ID"
             />
