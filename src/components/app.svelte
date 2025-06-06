@@ -18,8 +18,12 @@
 </script>
 
 <!-- Wrap Framework7's App with KonstaProvider with theme="parent" -->
-<KonstaProvider theme='ios' dark>
-  <App {...f7params}>
-    <View main url="/" />
-  </App>
+<KonstaProvider theme="ios" dark>
+  <div
+    class="mx-auto h-screen max-w-[380px] border-1 border-black-200 shadow-lg overflow-hidden relative bg-gradient-to-b"
+  >
+    <App {...f7params}>
+      <View main url="/" />
+    </App>
+  </div>
 </KonstaProvider>

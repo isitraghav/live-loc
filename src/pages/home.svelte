@@ -1,6 +1,5 @@
 <script>
   import "framework7-icons";
-  /* App.svelte */
   import { Page } from "framework7-svelte";
   import {
     Block,
@@ -18,6 +17,7 @@
   import { Geolocation } from "@capacitor/geolocation";
 
   let map;
+  let loading = false;
 
   var LeafIcon = L.Icon.extend({
     options: {
@@ -38,14 +38,33 @@
   });
 
   async function loadlocation() {
-    await Geolocation.getCurrentPosition().then((res) => {
+    loading = true;
+    try {
+      const res = await Geolocation.getCurrentPosition();
       console.log(res);
       let c = res.coords;
       let coords = [c.latitude, c.longitude];
       locationuser = coords;
       L.marker(coords, { icon: greenIcon }).addTo(map);
       map.setView(coords, 18);
-    });
+    } catch (error) {
+      console.error("Error getting location:", error);
+      // Fallback to browser geolocation
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let coords = [position.coords.latitude, position.coords.longitude];
+            locationuser = coords;
+            L.marker(coords, { icon: greenIcon }).addTo(map);
+            map.setView(coords, 18);
+          },
+          (err) => console.error("Fallback geolocation error:", err),
+          { enableHighAccuracy: true }
+        );
+      }
+    } finally {
+      loading = false;
+    }
   }
 
   let locationuser;
@@ -60,7 +79,10 @@
   const db = GUN({
     localStorage: true,
     radisk: true,
-    peers: ["https://gun-manhattan.herokuapp.com/gun"],
+    peers: [
+      "https://peer.wallie.io/gun",
+      "https://gun-manhattan.herokuapp.com/gun",
+    ],
   });
 
   let livelocid;
@@ -111,7 +133,9 @@
   let watchlocation;
   let sharedusermarker;
   async function shareloc() {
-    await Geolocation.getCurrentPosition().then(async (res) => {
+    loading = true;
+    try {
+      const res = await Geolocation.getCurrentPosition();
       console.log(res);
       let c = res.coords;
       let coords = [c.latitude, c.longitude];
@@ -119,42 +143,58 @@
       let liveid = nanoid();
       copy(liveid);
 
+      db.get("liveloc")
+        .get(liveid)
+        .put(JSON.stringify(coords), (ack) => {
+          if (!ack.err) {
+            console.log(liveid);
+            sharedlocation = true;
+            sharedlocid = liveid;
+          }
+        });
+
       watchlocation = await Geolocation.watchPosition(
         { enableHighAccuracy: true },
         (res) => {
-          c = res.coords;
-          coords = [c.latitude, c.longitude];
+          if (res) {
+            c = res.coords;
+            coords = [c.latitude, c.longitude];
 
-          console.log("loacation uploaded");
-          db.get("liveloc")
-            .get(liveid)
-            .put(JSON.stringify(coords), (ack) => {
-              if (!ack.err) {
-                console.log(liveid);
-                sharedlocation = true;
-                sharedlocid = liveid;
+            console.log("location uploaded");
+            db.get("liveloc")
+              .get(liveid)
+              .put(JSON.stringify(coords), (ack) => {
+                if (!ack.err) {
+                  console.log(liveid);
+                  sharedlocation = true;
+                  sharedlocid = liveid;
 
-                db.get("liveloc")
-                  .get(`${liveid}reply`)
-                  .on((res) => {
-                    if (res) {
-                      someonewatching = true;
-                      sharedlocation = false;
-                      if (sharedusermarker) {
-                        map.removeControl(sharedusermarker);
+                  db.get("liveloc")
+                    .get(`${liveid}reply`)
+                    .on((res) => {
+                      if (res) {
+                        someonewatching = true;
+                        sharedlocation = false;
+                        if (sharedusermarker) {
+                          map.removeControl(sharedusermarker);
+                        }
+                        sharedusermarker = L.Routing.control({
+                          waypoints: [locationuser, JSON.parse(res)],
+                          routeWhileDragging: false,
+                        }).addTo(map);
+                        console.log("someone watching");
                       }
-                      sharedusermarker = L.Routing.control({
-                        waypoints: [locationuser, JSON.parse(res)],
-                        routeWhileDragging: false,
-                      }).addTo(map);
-                      console.log("someone watching");
-                    }
-                  });
-              }
-            });
+                    });
+                }
+              });
+          }
         }
       );
-    });
+    } catch (error) {
+      console.error("Error sharing location:", error);
+    } finally {
+      loading = false;
+    }
   }
 
   async function stopsharing() {
@@ -184,7 +224,9 @@
   <div id="map" style="height: 400px;"></div>
 
   <div class="m-3">
-    {#if sharedlocation}
+    {#if loading}
+      <div>Loading...</div>
+    {:else if sharedlocation}
       <div>
         waiting for someone to put your id ( {sharedlocid} ) to set destination...
       </div>
@@ -199,7 +241,7 @@
               onInput={(res) => {
                 livelocid = res.srcElement.value;
               }}
-              onChange={trackID}
+              onChange={() => { trackID(); trackID(); }}
               type="text"
               placeholder="Enter liv-loc ID"
             />
